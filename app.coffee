@@ -32,11 +32,9 @@ handler = (request, response) ->
         response.end(data)
     )
 
-
-
 app = require('http').createServer(handler)
+app.listen process.env.PORT || 8080
 io = require('socket.io').listen(app)
-app.listen 8081
 
 #io.sockets.on('connection', (socket) ->
 #    socket.emit('news', {task: '[1, 0]'})

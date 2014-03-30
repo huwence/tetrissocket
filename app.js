@@ -62,9 +62,9 @@
 
   app = require('http').createServer(handler);
 
-  io = require('socket.io').listen(app);
+  app.listen(process.env.PORT || 8080);
 
-  app.listen(8081);
+  io = require('socket.io').listen(app);
 
   io.sockets.on('connection', function(socket) {
     var players;
