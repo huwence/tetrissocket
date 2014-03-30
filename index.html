@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SOCKET.IO_TEST</title>
+</head>
+<style>
+    html, body {
+        margin: 0;
+        padding: 0;
+        background: #ccc;
+    }
+
+    .btn {
+        width: 0;
+        height: 0;
+        display: inline-block;
+        border-radius: 10px;
+    }
+
+    .up {
+        border-right: 20px solid transparent;
+        border-left: 20px solid transparent;
+        border-bottom: 40px solid #4d7db6; 
+    }
+
+    .down {
+        border-top: 40px solid #4d7db6;
+        border-right: 20px solid transparent;
+        border-left: 20px solid transparent;
+    }
+
+    .left {
+        border-right: 40px solid #4d7db6;
+        border-top: 20px solid transparent;
+        border-bottom: 20px solid transparent; 
+        float: left;
+    }
+
+    .right {
+        border-left: 40px solid #4d7db6;
+        border-top: 20px solid transparent;
+        border-bottom: 20px solid transparent; 
+        float: right;
+    }
+
+    .restart {
+        width: 100px;
+        height: 40px;
+        line-height: 40px;
+        background: #4d7db6;
+        color: #fff;
+        cursor: pointer;
+    }
+
+    .stage {
+        width: 320px;
+        margin: 0 auto;
+    }
+
+    .row {
+        width: 100%;
+        text-align: center;
+        overflow: hidden;
+    }
+
+    .oper {
+        width: 120px;
+        margin: 100px auto;
+        display: none;
+    }
+
+</style>
+<script src="/socket.io/socket.io.js"></script>
+<body>
+    <div class="stage">
+        <div id="tip" class="row">
+        </div>
+        <div id="operating" class="oper">
+            <div class="row">
+                <div class="btn up" id="up" data-direct=1></div>
+            </div>
+            <div class="row">
+                <div class="btn left" id="left" data-direct=3></div>
+                <div class="btn right" id="right" data-direct=4></div>
+            </div>
+            <div class="row">
+                <div class="btn down" id="down" data-direct=2></div>
+            </div>
+            <div class="row">
+                <div class="btn restart" id="restart" data-direct=5>重新开始</div>
+            </div>
+        <div>
+    </div>
+</body>
+<script>
+    var socket = io.connect("http://localhost:8081")
+    var btns = ['up', 'down', 'left', 'right', 'restart']
+    var tip = document.querySelector('#tip')
+    var operating = document.querySelector('#operating')
+
+    var detectMobile = function () {
+        var agent = navigator.userAgent;
+
+        if (/Android|webOS|iPhone|iPad|iPod|BlackBerry|Window\sPhone/i.test(agent)) {
+            return true
+        } else {
+            return false
+        }
+    } 
+
+    var initBtns = function () {
+        var isMobile = detectMobile()
+            touchStart = isMobile ? 'touchstart' : 'mousedown',
+            touchEnd = isMobile ? 'touchend' : 'mouseup'
+
+        btns.forEach(function (id) {
+            var btn = document.getElementById(id),
+                events = [touchStart, touchEnd]
+
+            events.forEach(function (eventType) {
+                btn.addEventListener(eventType, function (e) {
+                    direction = +this.getAttribute('data-direct')
+                    socket.emit('move', {move: direction, type: e.type})
+                })
+            })
+
+        })
+    }
+
+    //notice server where someone entering the game
+    socket.emit('enter', 1)
+    socket.on('waiting', function (data) {
+        console.log(data)
+        if (data) {
+            tip.innerHTML = '无坑位，请稍后......';
+            operating.style.display = 'none';
+        } else {
+            operating.style.display = 'block';
+            initBtns();
+        }  
+    })
+
+</script>
+</html>
