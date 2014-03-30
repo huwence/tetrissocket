@@ -10,8 +10,9 @@
 
   handler = function(request, response) {
     var contenttype, pathname;
-    pathname = __dirname + url.parse(request.url).pathname;
+    pathname = 'public' + url.parse(request.url).pathname;
     contenttype = '';
+    console.log(pathname);
     if (path.extname(pathname) === '') {
       pathname += '/';
     }
@@ -19,6 +20,7 @@
       var ext;
       if (!exists) {
         response.writeHead(404);
+        return response.end('404');
       }
       ext = path.extname(pathname);
       return contenttype = (function() {

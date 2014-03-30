@@ -3,14 +3,18 @@ path = require('path')
 url = require('url')
 
 handler = (request, response) ->
-    pathname = __dirname + url.parse(request.url).pathname
+    pathname = 'public' + url.parse(request.url).pathname
     contenttype = ''
+
+    console.log pathname
 
     if path.extname(pathname) == ''
         pathname += '/'
 
     fs.exists(pathname, (exists) ->
-        response.writeHead(404) if not exists
+        if not exists
+            response.writeHead(404)
+            return response.end('404')
 
         ext = path.extname(pathname)
 

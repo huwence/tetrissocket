@@ -348,7 +348,7 @@ function handleEvent(type, is_key_down) {
 }
 
 function bindSocket() {
-    var socket = io.connect("http://localhost:8081"),
+    var socket = io.connect("http://obscure-sands-8946.herokuapp.com"),
         isMobile = detectMobile(),
         touchEnd = isMobile ? 'touchstart' : 'mousedown'
 
