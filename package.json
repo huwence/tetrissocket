@@ -1,0 +1,22 @@
+{
+  "name": "tetrissocket",
+  "version": "0.0.0",
+  "description": "tetris game with websocket",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "respository": {
+    "type": "git",
+    "url": "git@github.com:huwence/tetrissocket.git"
+  },
+  "keywords": [
+    "tetris",
+    "websocket"
+  ],
+  "author": "huwence",
+  "license": "MIT",
+  "dependencies": {
+    "socket.io": "^0.9.16"
+  }
+}
