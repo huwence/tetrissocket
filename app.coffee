@@ -6,8 +6,6 @@ handler = (request, response) ->
     pathname = 'public' + url.parse(request.url).pathname
     contenttype = ''
 
-    console.log pathname
-
     if path.extname(pathname) == ''
         pathname += '/'
 
@@ -37,7 +35,7 @@ handler = (request, response) ->
     )
 
 app = require('http').createServer(handler)
-app.listen process.env.PORT || 8080
+app.listen process.env.PORT || 5000
 io = require('socket.io').listen(app)
 
 #io.sockets.on('connection', (socket) ->
@@ -46,6 +44,11 @@ io = require('socket.io').listen(app)
 #        console.log(data)
 #    )
 #)
+
+io.configure(() ->
+    io.set('transports', ['xhr-polling'])
+    io.set('polling duration', 10)
+)
 
 io.sockets.on('connection', (socket) ->
     players = 0

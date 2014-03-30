@@ -12,7 +12,6 @@
     var contenttype, pathname;
     pathname = 'public' + url.parse(request.url).pathname;
     contenttype = '';
-    console.log(pathname);
     if (path.extname(pathname) === '') {
       pathname += '/';
     }
@@ -64,9 +63,14 @@
 
   app = require('http').createServer(handler);
 
-  app.listen(process.env.PORT || 8080);
+  app.listen(process.env.PORT || 5000);
 
   io = require('socket.io').listen(app);
+
+  io.configure(function() {
+    io.set('transports', ['xhr-polling']);
+    return io.set('polling duration', 10);
+  });
 
   io.sockets.on('connection', function(socket) {
     var players;

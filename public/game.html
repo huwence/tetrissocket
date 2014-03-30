@@ -24,7 +24,7 @@
     </div>
 </body>
 <script>
-    var socket = io.connect("http://obscure-sands-8946.herokuapp.com"),
+    var socket = io.connect(window.location.hostname),
         frame = document.getElementById('gameFrame')
 
     socket.on('start', function (flag) {
